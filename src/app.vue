@@ -6,6 +6,7 @@
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  /* min-height: 100vh; */
 }
 .layout-logo {
   width: 100px;
@@ -28,7 +29,7 @@
         <router-view></router-view>
   </div>-->
   <div class="layout">
-    <Layout>
+    <Layout style="min-height: 100vh">
       <Header>
         <Menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo"></div>
@@ -48,30 +49,19 @@
           </div>
         </Menu>
       </Header>
-      <Layout>
+      <Layout style="height: 100%">
         <Sider hide-trigger :style="{background: '#fff'}">
-          <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
-            <Submenu name="1">
+          <Menu theme="light" width="auto" active-name="1-1" :open-names="[1]" @on-select="selectMenu">
+            <Submenu v-for="(subMenu, subIndex) in router" :key="subIndex" :name="subIndex + 1">
               <template slot="title">
-                <Icon type="ios-navigate"></Icon>Item 1
+                <Icon type="ios-navigate"></Icon>
+                {{subMenu.label}}
               </template>
-              <MenuItem name="1-1">Option 1</MenuItem>
-              <MenuItem name="1-2">Option 2</MenuItem>
-              <MenuItem name="1-3">Option 3</MenuItem>
-            </Submenu>
-            <Submenu name="2">
-              <template slot="title">
-                <Icon type="ios-keypad"></Icon>Item 2
-              </template>
-              <MenuItem name="2-1">Option 1</MenuItem>
-              <MenuItem name="2-2">Option 2</MenuItem>
-            </Submenu>
-            <Submenu name="3">
-              <template slot="title">
-                <Icon type="ios-analytics"></Icon>Item 3
-              </template>
-              <MenuItem name="3-1">Option 1</MenuItem>
-              <MenuItem name="3-2">Option 2</MenuItem>
+              <MenuItem
+                v-for="(menuItem, itemIndex) in subMenu.children"
+                :key="itemIndex"
+                :name="(subIndex + 1) + '-' + (itemIndex + 1)"
+              >{{menuItem.label}}</MenuItem>
             </Submenu>
           </Menu>
         </Sider>
@@ -81,7 +71,7 @@
             <BreadcrumbItem>Components</BreadcrumbItem>
             <BreadcrumbItem>Layout</BreadcrumbItem>
           </Breadcrumb>
-          <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">Content</Content>
+          <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}"><router-view></router-view></Content>
         </Layout>
       </Layout>
     </Layout>
@@ -90,10 +80,52 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      router: [
+        {
+          label: "图",
+          path: "/graph",
+          children: [
+            {
+              label: "dijkstra",
+              path: "/dijkstra"
+            },
+            {
+              label: "testgraph",
+              path: "/test"
+            }
+          ]
+        },
+        {
+          label: "图",
+          path: "/graph",
+          children: [
+            {
+              label: "dijkstra",
+              path: "/dijkstra"
+            },
+            {
+              label: "testgraph",
+              path: "/test"
+            }
+          ]
+        }
+      ]
+    };
   },
   mounted() {},
   beforeDestroy() {},
-  methods: {}
+  methods: {
+    selectMenu(name) {
+      console.log("​selectMenu -> name", name);
+      const index = name.split('-');
+      const routerItem = this.router[+index[0] - 1];
+      const parentUri = routerItem.path;
+      const childrenUri = routerItem.children[+index[1] - 1].path;
+      const uri = parentUri + childrenUri;
+			console.log("​selectMenu -> uri", uri)
+      this.$router.push(uri);
+    }
+  }
 };
 </script>

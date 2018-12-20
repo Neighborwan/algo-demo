@@ -11,6 +11,10 @@ const routers = [
     {
         path: '/',
         component: home
+    },
+    {
+        path: '/graph/dijkstra',
+        component: (resolve) => require(['./views/graph/dijkstra.vue'], resolve)
     }
 ];
 export default routers;
