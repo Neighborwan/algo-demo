@@ -23,6 +23,21 @@
   margin: 0 auto;
   margin-right: 20px;
 }
+
+body {
+  font: 300 14px 'Helvetica Neue', Helvetica;
+}
+
+.node rect {
+  stroke: #333;
+  fill: #fff;
+}
+
+.edgePath path {
+  stroke: #333;
+  fill: #333;
+  stroke-width: 1.5px;
+}
 </style>
 <template>
   <!-- <div>
@@ -51,7 +66,13 @@
       </Header>
       <Layout style="height: 100%">
         <Sider hide-trigger :style="{background: '#fff'}">
-          <Menu theme="light" width="auto" active-name="1-1" :open-names="[1]" @on-select="selectMenu">
+          <Menu
+            theme="light"
+            width="auto"
+            active-name="1-1"
+            :open-names="[1]"
+            @on-select="selectMenu"
+          >
             <Submenu v-for="(subMenu, subIndex) in router" :key="subIndex" :name="subIndex + 1">
               <template slot="title">
                 <Icon type="ios-navigate"></Icon>
@@ -71,7 +92,9 @@
             <BreadcrumbItem>Components</BreadcrumbItem>
             <BreadcrumbItem>Layout</BreadcrumbItem>
           </Breadcrumb>
-          <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}"><router-view></router-view></Content>
+          <Content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
+            <router-view></router-view>
+          </Content>
         </Layout>
       </Layout>
     </Layout>
@@ -118,12 +141,12 @@ export default {
   methods: {
     selectMenu(name) {
       console.log("​selectMenu -> name", name);
-      const index = name.split('-');
+      const index = name.split("-");
       const routerItem = this.router[+index[0] - 1];
       const parentUri = routerItem.path;
       const childrenUri = routerItem.children[+index[1] - 1].path;
       const uri = parentUri + childrenUri;
-			console.log("​selectMenu -> uri", uri)
+      console.log("​selectMenu -> uri", uri);
       this.$router.push(uri);
     }
   }
