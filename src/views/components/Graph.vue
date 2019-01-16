@@ -13,8 +13,8 @@
 
 <template>
     <div>
-        <svg width='360' height='460'>
-            <g></g>
+        <svg :id="svgid" width='660' height='460'>
+            <!-- <g></g> -->
         </svg>
     </div>
 </template>
@@ -23,10 +23,16 @@
 <script>
 export default {
     props: {
-        msg: String
+        msg: String,
+        g: {},
+        svgid: String
     },
     mounted() {
         // Create a new directed graph
+        const _g = this._props.g;
+        delete _g['nodes'];
+        console.log('_g', _g.nodes(), _g.edges(), this._props.svgid)
+        _g.nodes = _g._nodes;
         var g = new dagreD3.graphlib.Graph().setGraph({});
 
         // States and transitions from RFC 793
@@ -39,7 +45,7 @@ export default {
 
         // Set up the edges
         g.setEdge("1", "2", { label: "1" });
-        g.setEdge("1", "4", { label: "1" });
+        g.setEdge("1", "4", { label: '333' });
         g.setEdge("2", "4", { label: "1" });
         g.setEdge("3", "5", { label: "1" });
         g.setEdge("4", "5", { label: "1" });
@@ -49,8 +55,10 @@ export default {
             var node = g.node(v);
             node.rx = node.ry = 5;
         });
-        var svg = d3.select("svg"),
+        const svgId = '#' + this._props.svgid
+        var svg = d3.select(svgId),
             inner = svg.select("g");
+        console.log('++++++++++++++++', g);
 
         // Set up zoom support
         var zoom = d3.zoom().on("zoom", function() {
@@ -60,7 +68,6 @@ export default {
 
         // Create the renderer
         var render = new dagreD3.render();
-        console.log("​created -> render", g, render);
 
         // Run the renderer. This is what draws the final graph.
         render(svg, g);
