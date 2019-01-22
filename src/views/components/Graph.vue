@@ -14,7 +14,7 @@
 <template>
     <div>
         <svg :id="svgid" width='660' height='460'>
-            <!-- <g></g> -->
+            <!-- <g :id="'g_' + svgid"></g> -->
         </svg>
     </div>
 </template>
@@ -55,7 +55,8 @@ export default {
             var node = g.node(v);
             node.rx = node.ry = 5;
         });
-        const svgId = '#' + this._props.svgid
+        const svgId = '#' + this._props.svgid;
+        const g_svgId = '#' + 'g_' + this._props.svgid;
         var svg = d3.select(svgId),
             inner = svg.select("g");
         console.log('++++++++++++++++', g);
