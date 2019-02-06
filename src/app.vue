@@ -40,9 +40,6 @@ body {
 }
 </style>
 <template>
-  <!-- <div>
-        <router-view></router-view>
-  </div>-->
   <div class="layout">
     <Layout style="min-height: 100vh">
       <Header>
